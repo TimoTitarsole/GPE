@@ -59,7 +59,6 @@ Shader "Unlit/Yejesadf"
                 // movement
                 float3 worldPos = mul(unity_ObjectToWorld, v.vertex).xyz;
                 o.vertex.y += sin(worldPos.x + _Time.w);
-                o.uv = TRANSFORM_TEX(v.uv, _MaskTex);
 
                 // normals
                 float3 normalDir = normalize(mul(unity_ObjectToWorld, v.normal));//normal direction in world space for light calc

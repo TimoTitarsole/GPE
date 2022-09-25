@@ -152,6 +152,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d43bd329bb02e554cba49f02de43207f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  coinPickedUp: 0
   isServer: 0
   players:
   - {fileID: 1023995276}
@@ -682,6 +683,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 999d5ec756fbe4543be76a383ee95074, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  network: {fileID: 0}
 --- !u!54 &2081487221
 Rigidbody:
   m_ObjectHideFlags: 0

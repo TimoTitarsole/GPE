@@ -106,8 +106,8 @@ public class NetworkScript : MonoBehaviour
         {
             if (delay > 0 && i != myID)
             {
-                float yDelay = delay * (players[i].ySpeed * Time.fixedDeltaTime);
-                float xDelay = delay * (players[i].xSpeed * Time.fixedDeltaTime);
+                float yDelay = delay * (players[i].ySpeed);
+                float xDelay = delay * (players[i].xSpeed);
 
                 players[i].transform.position = Vector3.Lerp(players[i].transform.position, new Vector3(players[i].transform.position.x + xDelay, players[i].transform.position.y + yDelay, 0), .5f);
             }

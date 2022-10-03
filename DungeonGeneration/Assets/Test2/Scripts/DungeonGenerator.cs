@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 
@@ -19,6 +17,7 @@ public class DungeonGenerator : MonoBehaviour
     [Range(1, 4)]
     public int corridorThickness;
 
+    public Tile debugTile;
     public int dungeonSize;
 
     [HideInInspector]
@@ -30,7 +29,7 @@ public class DungeonGenerator : MonoBehaviour
     [HideInInspector]
     public Tile mrTile;
 
-    [Range(1, 6)]
+    [Range(0, 6)]
     public int numberOfIterations;
 
     public bool shouldDebugDrawBsp;
@@ -78,8 +77,8 @@ public class DungeonGenerator : MonoBehaviour
         GenerateContainersUsingBsp();
         GenerateRoomsInsideContainers();
         GenerateCorridors();
-        //FillRoomsOnTilemap();
-        //PaintTilesAccordingToTheirNeighbors();
+        FillRoomsOnTilemap();
+        PaintTilesAccordingToTheirNeighbors();
     }
 
     private void AttemptDebugDrawBsp()
@@ -97,8 +96,7 @@ public class DungeonGenerator : MonoBehaviour
 
     private void GenerateContainersUsingBsp()
     {
-        tree = BspTree.Split(numberOfIterations,
-            new RectInt(0, 0, dungeonSize, dungeonSize));
+        tree = BspTree.Split(numberOfIterations, new RectInt(0, 0, dungeonSize, dungeonSize));
     }
 
     private void GenerateCorridors()
@@ -111,9 +109,10 @@ public class DungeonGenerator : MonoBehaviour
 
     private void GenerateCorridorsNode(BspTree node)
     {
-        if (node.IsLeaf())
+        print('a');
+        if (node.IsInternal())
         {
-            Debug.Log("Ye");
+            print('b');
             RectInt leftContainer = node.left.container;
             RectInt rightContainer = node.right.container;
             Vector2 leftCenter = leftContainer.center;
@@ -151,7 +150,7 @@ public class DungeonGenerator : MonoBehaviour
     private Tile GetTileByNeihbors(int i, int j)
     {
         var mmGridTile = map.GetTile(new Vector3Int(i, j, 0));
-        if (mmGridTile == null) return null; // you shouldn't repaint a n
+        if (mmGridTile == null) return null; // you shouldn't repaint a null
 
         var blGridTile = map.GetTile(new Vector3Int(i - 1, j - 1, 0));
         var bmGridTile = map.GetTile(new Vector3Int(i, j - 1, 0));
@@ -187,6 +186,7 @@ public class DungeonGenerator : MonoBehaviour
     {
         map = GetComponentInChildren<Tilemap>();
         map.ClearAllTiles();
+        //Random.InitState(3);
     }
 
     private void OnDrawGizmos()
@@ -214,9 +214,14 @@ public class DungeonGenerator : MonoBehaviour
         }
     }
 
+    // Use this for initialization
+    private void Start()
+    {
+    }
+
     private void UpdateTilemapUsingTreeNode(BspTree node)
     {
-        if (node.IsLeaf())
+        if (node.left == null && node.right == null)
         {
             for (int i = node.room.x; i < node.room.xMax; i++)
             {

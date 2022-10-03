@@ -78,8 +78,8 @@ public class DungeonGenerator : MonoBehaviour
         GenerateContainersUsingBsp();
         GenerateRoomsInsideContainers();
         GenerateCorridors();
-        FillRoomsOnTilemap();
-        PaintTilesAccordingToTheirNeighbors();
+        //FillRoomsOnTilemap();
+        //PaintTilesAccordingToTheirNeighbors();
     }
 
     private void AttemptDebugDrawBsp()
@@ -113,6 +113,7 @@ public class DungeonGenerator : MonoBehaviour
     {
         if (node.IsLeaf())
         {
+            Debug.Log("Ye");
             RectInt leftContainer = node.left.container;
             RectInt rightContainer = node.right.container;
             Vector2 leftCenter = leftContainer.center;

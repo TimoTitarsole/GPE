@@ -10,9 +10,6 @@ public class RoomGenerator : MonoBehaviour
 
     private List<LineSegment> DelaunayTriangulation;
 
-    //Room size distribution
-    private int[] Distribution = new int[] { 3, 3, 3, 4, 4, 4, 5, 5, 5, 6, 6, 7, 8, 10, 12, 14 };
-
     private bool Done = false;
 
     private GameObject LinesContainer;
@@ -95,8 +92,8 @@ public class RoomGenerator : MonoBehaviour
             Room room = (GameObject.Instantiate(Resources.Load("Room") as GameObject)).GetComponent<Room>();
             room.transform.parent = RoomsContainer.transform;
 
-            int width = Distribution[Random.Range(0, Distribution.Length)];
-            int height = Distribution[Random.Range(0, Distribution.Length)];
+            int width = DungeonGenerator.instance.RoomSizeDistribution[Random.Range(0, DungeonGenerator.instance.RoomSizeDistribution.Length)];
+            int height = DungeonGenerator.instance.RoomSizeDistribution[Random.Range(0, DungeonGenerator.instance.RoomSizeDistribution.Length)];
             Vector2 position = GetRandomPositionInCircle(radius);
 
             totalWidth += width;

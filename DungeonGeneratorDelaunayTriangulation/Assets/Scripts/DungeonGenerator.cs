@@ -15,15 +15,19 @@ public class DungeonGenerator : MonoBehaviour
 {
     public static DungeonGenerator instance;
 
-    [SerializeField]
-    [Range(0, 2)]
-    public int ItemRoomCount = 1;
-
+    [SerializeField] public int[] RoomSizeDistribution = new int[] { 5, 5, 5, 5, 5, 5, 5, 5, 5, 6, 6, 7, 8, 10, 12, 14 };
     private GameObject DungeonMapTexture;
+
     private int EndRoomID;
     private int[,] Grid;
 
     private List<int> ItemRoomIDs;
+
+    #region Room Stuff
+
+    [SerializeField]
+    [Range(0, 2)]
+    public int ItemRoomCount = 1;
 
     [SerializeField]
     [Range(0, 2)]
@@ -42,6 +46,8 @@ public class DungeonGenerator : MonoBehaviour
     [SerializeField]
     [Range(10, 1000)]
     private int RoomCount = 300;
+
+    #endregion Room Stuff
 
     private RoomGenerator RoomGenerator;
     private List<Room> Rooms;

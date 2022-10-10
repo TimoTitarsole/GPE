@@ -469,7 +469,7 @@ GameObject:
   - component: {fileID: 1103685164}
   - component: {fileID: 1103685163}
   m_Layer: 0
-  m_Name: DungeonGenerator
+  m_Name: DungeonGenerator [40, 0.15, 25]
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -488,10 +488,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   ItemRoomCount: 2
+  RoomSizeDistribution: 050000000500000005000000050000000500000005000000050000000500000005000000060000000600000007000000080000000a0000000c0000000e000000
   MainRoomFrequency: 2
   Radius: 40
   RoomConnectionFrequency: 0.15
-  RoomCount: 20
+  RoomCount: 25
   DisabledColor: {r: 0.2, g: 0.2, b: 0.2, a: 0.5}
   DoorColor: {r: 1, g: 0, b: 1, a: 1}
   EndRoomColor: {r: 1, g: 0, b: 0.024376392, a: 1}

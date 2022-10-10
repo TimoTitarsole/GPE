@@ -11,23 +11,25 @@ public enum ConnectionType
 
 public class RoomConnection
 {
-    public ConnectionType Direction
-    {
-        get;
-        private set;
-    }
-    public Room Room
-    {
-        get;
-        private set;
-    }
-
     public LineSegment Line1;
+
     public LineSegment Line2;
 
     public RoomConnection(Room room, ConnectionType direction)
     {
         Room = room;
         Direction = direction;
+    }
+
+    public ConnectionType Direction
+    {
+        get;
+        private set;
+    }
+
+    public Room Room
+    {
+        get;
+        private set;
     }
 }

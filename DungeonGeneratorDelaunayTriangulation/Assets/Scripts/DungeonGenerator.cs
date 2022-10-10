@@ -14,9 +14,16 @@ public enum TileType
 public class DungeonGenerator : MonoBehaviour
 {
     public static DungeonGenerator instance;
+
+    [SerializeField]
+    [Range(0, 2)]
+    public int ItemRoomCount = 1;
+
     private GameObject DungeonMapTexture;
     private int EndRoomID;
     private int[,] Grid;
+
+    private List<int> ItemRoomIDs;
 
     [SerializeField]
     [Range(0, 2)]
@@ -39,7 +46,6 @@ public class DungeonGenerator : MonoBehaviour
     private RoomGenerator RoomGenerator;
     private List<Room> Rooms;
     private List<int> SecondaryRoomIDs;
-    private List<int> SpecialRoomIDs;
     private int StartRoomID;
 
     #region Colors
@@ -50,9 +56,9 @@ public class DungeonGenerator : MonoBehaviour
     public Color DoorColor = Color.magenta;
     public Color EndRoomColor = new Color(195 / 255f, 85 / 255f, 165 / 255f);
     public Color HallwayColor = Color.red;
+    public Color ItemRoomColor = new Color(0 / 255f, 255 / 255f, 255 / 255f);
     public Color MainColor = new Color(200f / 255f, 150f / 255f, 65 / 255f);
     public Color SecondaryColor = new Color(0.8f, 0.8f, 0.8f);
-    public Color SpecialRoomColor = new Color(0 / 255f, 255 / 255f, 255 / 255f);
     public Color StartRoomColor = new Color(90 / 255f, 195 / 255f, 90 / 255f);
     public Color WallColor = Color.black;
 
@@ -311,16 +317,16 @@ public class DungeonGenerator : MonoBehaviour
     {
         PrimaryRoomIDs = new List<int>();
         SecondaryRoomIDs = new List<int>();
-        SpecialRoomIDs = new List<int>();
+        ItemRoomIDs = new List<int>();
 
         //Get our boundaries and list of primary and secondary room IDs
         for (int n = 0; n < Rooms.Count; n++)
         {
             if (Rooms[n].IsVisible)
             {
-                if (Rooms[n].IsSpecialRoom)
+                if (Rooms[n].IsItemRoom)
                 {
-                    SpecialRoomIDs.Add(Rooms[n].ID);
+                    ItemRoomIDs.Add(Rooms[n].ID);
                 }
                 else if (Rooms[n].IsStartRoom)
                 {
@@ -427,9 +433,9 @@ public class DungeonGenerator : MonoBehaviour
                 {
                     color = SecondaryColor;
                 }
-                else if (SpecialRoomIDs.Contains(Grid[x, y]))
+                else if (ItemRoomIDs.Contains(Grid[x, y]))
                 {
-                    color = SpecialRoomColor;
+                    color = ItemRoomColor;
                 }
                 else if (StartRoomID == (Grid[x, y]))
                 {

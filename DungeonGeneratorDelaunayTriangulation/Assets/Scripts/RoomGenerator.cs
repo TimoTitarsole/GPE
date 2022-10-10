@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using Delaunay;
 using Delaunay.Geo;
+using UnityEngine.SceneManagement;
 
 public class RoomGenerator : MonoBehaviour
 {
@@ -142,7 +143,6 @@ public class RoomGenerator : MonoBehaviour
                 line.GetComponent<LineRenderer>().sortingOrder = 100;
                 line.GetComponent<LineRenderer>().startColor = Color.blue;
                 line.GetComponent<LineRenderer>().endColor = Color.blue;
-                //line.GetComponent<LineRenderer>().SetColors(Color.blue, Color.blue);
 
                 line.transform.parent = LinesContainer.transform;
             }
@@ -189,7 +189,7 @@ public class RoomGenerator : MonoBehaviour
         GenerateSpanningTree(true);
         ProcessRoomConnections(false);
 
-        SetStartAndEndRooms();
+        SetSpecialRooms();
 
         //Calculate boundaries
         XMin = float.MaxValue;
@@ -261,7 +261,6 @@ public class RoomGenerator : MonoBehaviour
                 line.GetComponent<LineRenderer>().sortingOrder = 100;
                 line.GetComponent<LineRenderer>().startColor = Color.red;
                 line.GetComponent<LineRenderer>().endColor = Color.red;
-                //line.GetComponent<LineRenderer>().SetColors(Color.red, Color.red);
                 line.transform.parent = LinesContainer.transform;
             }
 
@@ -366,7 +365,7 @@ public class RoomGenerator : MonoBehaviour
         }
     }
 
-    private void SetStartAndEndRooms()
+    private void SetSpecialRooms()
     {
         List<Room> roomsWithOneConnection = new List<Room>();
         List<Room> roomsWithTwoConnection = new List<Room>();
@@ -386,8 +385,10 @@ public class RoomGenerator : MonoBehaviour
 
         Room start = null;
         Room end = null;
-        Room special = null;
+        List<Room> items = new List<Room>();
         float distance = 0;
+        int endID = 0;
+        bool endHasOneConnection = false;
 
         //attempt to grab start room
         if (roomsWithOneConnection.Count >= 1)
@@ -411,6 +412,8 @@ public class RoomGenerator : MonoBehaviour
                 {
                     distance = d;
                     end = roomsWithOneConnection[n];
+                    endID = n;
+                    endHasOneConnection = true;
                 }
             }
             for (int n = 0; n < roomsWithTwoConnection.Count; n++)
@@ -420,30 +423,56 @@ public class RoomGenerator : MonoBehaviour
                 {
                     distance = d;
                     end = roomsWithTwoConnection[n];
+                    endID = n;
+                    endHasOneConnection = false;
+                }
+            }
+            if (end != null)
+            {
+                if (endHasOneConnection)
+                {
+                    roomsWithOneConnection.RemoveAt(endID);
+                }
+                else
+                {
+                    roomsWithTwoConnection.RemoveAt(endID);
                 }
             }
         }
 
         if (start != null && end != null)
         {
-            if (roomsWithOneConnection.Count >= 1)
+            for (int i = 0; i < DungeonGenerator.instance.ItemRoomCount; i++)
             {
-                int i = Random.Range(0, roomsWithOneConnection.Count);
-                special = roomsWithOneConnection[i];
-                roomsWithOneConnection.RemoveAt(i);
+                if (roomsWithOneConnection.Count >= 1)
+                {
+                    int n = Random.Range(0, roomsWithOneConnection.Count);
+                    items.Add(roomsWithOneConnection[n]);
+                    roomsWithOneConnection.RemoveAt(n);
+                }
+                else if (roomsWithTwoConnection.Count > 1)
+                {
+                    int n = Random.Range(0, roomsWithTwoConnection.Count);
+                    items.Add(roomsWithTwoConnection[n]);
+                    roomsWithTwoConnection.RemoveAt(0);
+                }
             }
         }
 
-        if (start != null && end != null && special != null)
+        if (start != null && end != null && items.Count == DungeonGenerator.instance.ItemRoomCount)
         {
             start.SetStartRoom();
             end.SetEndRoom();
-            special.SetSpecialRoom();
+            foreach (Room room in items)
+            {
+                room.SetItemRoom();
+            }
             IsValid = true;
         }
         else
         {
             IsValid = false;
+            SceneManager.LoadScene("main");
         }
     }
 

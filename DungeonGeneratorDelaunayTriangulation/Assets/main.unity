@@ -487,16 +487,20 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 52b5d7960b24cc84faf90fe9c11b13ea, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  ItemRoomCount: 2
   MainRoomFrequency: 2
   Radius: 40
   RoomConnectionFrequency: 0.15
   RoomCount: 20
   DisabledColor: {r: 0.2, g: 0.2, b: 0.2, a: 0.5}
-  EndRoomColor: {r: 0.7647059, g: 0.33333334, b: 0.64705884, a: 1}
+  DoorColor: {r: 1, g: 0, b: 1, a: 1}
+  EndRoomColor: {r: 1, g: 0, b: 0.024376392, a: 1}
+  HallwayColor: {r: 0.6509434, g: 0.6509434, b: 0.6509434, a: 1}
+  ItemRoomColor: {r: 0, g: 1, b: 1, a: 1}
   MainColor: {r: 0.78431374, g: 0.5882353, b: 0.25490198, a: 1}
   SecondaryColor: {r: 0.8, g: 0.8, b: 0.8, a: 1}
-  SpecialRoomColor: {r: 0, g: 1, b: 1, a: 1}
-  StartRoomColor: {r: 0.3529412, g: 0.7647059, b: 0.3529412, a: 1}
+  StartRoomColor: {r: 0, g: 1, b: 0, a: 1}
+  WallColor: {r: 0, g: 0, b: 0, a: 1}
 --- !u!4 &1103685164
 Transform:
   m_ObjectHideFlags: 0

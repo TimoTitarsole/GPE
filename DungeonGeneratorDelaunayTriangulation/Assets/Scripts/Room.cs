@@ -41,6 +41,12 @@ public class Room : MonoBehaviour
         private set;
     }
 
+    public bool IsItemRoom
+    {
+        get;
+        private set;
+    }
+
     public bool IsLocked
     {
         get;
@@ -59,12 +65,6 @@ public class Room : MonoBehaviour
         {
             return RigidBody2D.IsSleeping();
         }
-    }
-
-    public bool IsSpecialRoom
-    {
-        get;
-        private set;
     }
 
     public bool IsStartRoom
@@ -108,6 +108,11 @@ public class Room : MonoBehaviour
         IsEndRoom = true;
     }
 
+    public void SetItemRoom()
+    {
+        IsItemRoom = true;
+    }
+
     public void SetLocked(bool locked)
     {
         IsLocked = locked;
@@ -116,11 +121,6 @@ public class Room : MonoBehaviour
     public void SetMain()
     {
         IsMainRoom = true;
-    }
-
-    public void SetSpecialRoom()
-    {
-        IsSpecialRoom = true;
     }
 
     public void SetStartRoom()
@@ -169,8 +169,8 @@ public class Room : MonoBehaviour
                     Background.color = DungeonGenerator.instance.StartRoomColor;
                 else if (IsEndRoom)
                     Background.color = DungeonGenerator.instance.EndRoomColor;
-                else if (IsSpecialRoom)
-                    Background.color = DungeonGenerator.instance.SpecialRoomColor;
+                else if (IsItemRoom)
+                    Background.color = DungeonGenerator.instance.ItemRoomColor;
                 else
                     Background.color = DungeonGenerator.instance.MainColor;
             }

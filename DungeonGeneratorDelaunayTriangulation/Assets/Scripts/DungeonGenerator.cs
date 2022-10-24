@@ -23,8 +23,14 @@ public class DungeonGenerator : MonoBehaviour
 
     private List<int> ItemRoomIDs;
 
+    private RoomGenerator RoomGenerator;
+    private List<Room> Rooms;
+    private List<int> SecondaryRoomIDs;
+    private int StartRoomID;
+
     #region Room Stuff
 
+    [Header("Dungeon Variables")]
     [SerializeField]
     [Range(0, 2)]
     public int ItemRoomCount = 1;
@@ -49,11 +55,6 @@ public class DungeonGenerator : MonoBehaviour
 
     #endregion Room Stuff
 
-    private RoomGenerator RoomGenerator;
-    private List<Room> Rooms;
-    private List<int> SecondaryRoomIDs;
-    private int StartRoomID;
-
     #region Colors
 
     [Header("Colors")]
@@ -69,6 +70,17 @@ public class DungeonGenerator : MonoBehaviour
     public Color WallColor = Color.black;
 
     #endregion Colors
+
+    #region Tile Prefabs
+
+    [Header("Tile Prefabs")]
+    [SerializeField]
+    private GameObject primaryRoomTile;
+
+    [SerializeField]
+    private GameObject secondaryRoomTile, itemRoomTile, startRoomTile, endRoomTile, hallwayTile, wallTile, doorTile;
+
+    #endregion Tile Prefabs
 
     private void AddDoor(Vector2 p0, Vector2 p1)
     {

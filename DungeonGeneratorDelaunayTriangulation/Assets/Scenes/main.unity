@@ -278,7 +278,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 286, y: 286}
+  m_SizeDelta: {x: 496, y: 496}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &493876130
 MonoBehaviour:
@@ -382,7 +382,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 176.0499, y: -168.0499}
+  m_AnchoredPosition: {x: 274, y: -272}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &817410095
@@ -683,7 +683,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0.0048570633, g: 0, b: 1, a: 1}
+  m_Color: {r: 1, g: 0, b: 1, a: 1}
   m_RaycastTarget: 0
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -747,7 +747,7 @@ MonoBehaviour:
   RoomConnectionFrequency: 0.15
   RoomCount: 100
   DisabledColor: {r: 0.2, g: 0.2, b: 0.2, a: 0.21960784}
-  DoorColor: {r: 1, g: 0, b: 1, a: 1}
+  DoorColor: {r: 0.46226418, g: 0.22170648, b: 0, a: 1}
   EndRoomColor: {r: 1, g: 0, b: 0.024376392, a: 1}
   HallwayColor: {r: 0.6509434, g: 0.6509434, b: 0.6509434, a: 1}
   ItemRoomColor: {r: 0, g: 1, b: 1, a: 1}
@@ -812,7 +812,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 290, y: 290}
+  m_SizeDelta: {x: 500, y: 500}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1250394845
 MonoBehaviour:

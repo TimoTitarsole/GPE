@@ -1,6 +1,9 @@
 ﻿using UnityEngine;
 using System.Collections.Generic;
 using UnityEngine.SceneManagement;
+using static RoomGenerator;
+using UnityEditor.SearchService;
+using UnityEngine.UI;
 
 // Room IDs start at 10
 public enum TileType
@@ -16,13 +19,15 @@ public class DungeonGenerator : MonoBehaviour
     public static DungeonGenerator instance;
 
     [SerializeField] public int[] RoomSizeDistribution = new int[] { 5, 5, 5, 5, 5, 5, 5, 5, 5, 6, 6, 7, 8, 10, 12, 14 };
-    private GameObject DungeonMapTexture;
+    [SerializeField] private GameObject DungeonMapTexture;
+    [SerializeField] private Image DungeonMapTexture2;
 
     private int EndRoomID;
     private int[,] Grid;
 
     private List<int> ItemRoomIDs;
 
+    private Vector3 playerSpawnLocation;
     private RoomGenerator RoomGenerator;
     private List<Room> Rooms;
     private List<int> SecondaryRoomIDs;
@@ -73,12 +78,12 @@ public class DungeonGenerator : MonoBehaviour
 
     #region Tile Prefabs
 
-    [Header("Tile Prefabs")]
+    [Header("Tile stuff")]
     [SerializeField]
-    private GameObject primaryRoomTile;
+    private Transform dungeon3D;
 
     [SerializeField]
-    private GameObject secondaryRoomTile, itemRoomTile, startRoomTile, endRoomTile, hallwayTile, wallTile, doorTile;
+    private GameObject primaryRoomTile, wallTile, playerPrefab;
 
     #endregion Tile Prefabs
 
@@ -487,9 +492,75 @@ public class DungeonGenerator : MonoBehaviour
         return texture;
     }
 
+    #region 3D Dungeon
+
+    private void Create3dDungeon()
+    {
+        int width = Grid.GetLength(0);
+        int height = Grid.GetLength(1);
+
+        bool playerHasSpawnLocation = false;
+
+        for (var x = 0; x < width; x++)
+        {
+            for (var y = 0; y < height; y++)
+            {
+                if (PrimaryRoomIDs.Contains(Grid[x, y]))
+                {
+                    createFloor(x, y, MainColor);
+                }
+                else if (SecondaryRoomIDs.Contains(Grid[x, y]))
+                {
+                    //createFloor(x, y, SecondaryColor);
+                    createFloor(x, y, HallwayColor);
+                }
+                else if (ItemRoomIDs.Contains(Grid[x, y]))
+                {
+                    createFloor(x, y, ItemRoomColor);
+                }
+                else if (StartRoomID == (Grid[x, y]))
+                {
+                    createFloor(x, y, StartRoomColor);
+
+                    if (!playerHasSpawnLocation)
+                    {
+                        playerSpawnLocation = new Vector3(x, 1, y);
+                        //Instantiate(playerPrefab, new Vector3(x, 0, y), Quaternion.identity);
+                        playerHasSpawnLocation = true;
+                    }
+                }
+                else if (EndRoomID == (Grid[x, y]))
+                {
+                    createFloor(x, y, EndRoomColor);
+                }
+                else if (Grid[x, y] == 1)
+                {
+                    createFloor(x, y, HallwayColor);
+                }
+                else if (Grid[x, y] == 2)
+                {
+                    Instantiate(wallTile, new Vector3(x, 0, y), Quaternion.identity, dungeon3D);
+                }
+                else if (Grid[x, y] == 3)
+                {
+                    createFloor(x, y, DoorColor);
+                }
+            }
+        }
+    }
+
+    private void createFloor(int x, int y, Color color)
+    {
+        GameObject tile = Instantiate(primaryRoomTile, new Vector3(x, 0, y), Quaternion.identity, dungeon3D);
+        Material mat = tile.GetComponent<Renderer>().material;
+        mat.color = color;
+    }
+
+    #endregion 3D Dungeon
+
     private void Init()
     {
-        DungeonMapTexture = transform.Find("DungeonMapTexture").gameObject;
+        //DungeonMapTexture = transform.Find("DungeonMapTexture").gameObject;
         RoomGenerator = transform.Find("RoomGenerator").GetComponent<RoomGenerator>();
         RoomGenerator.OnRoomsGenerated += RoomGenerator_OnRoomsGenerated;
         instance = this;
@@ -509,7 +580,12 @@ public class DungeonGenerator : MonoBehaviour
         DungeonMapTexture.GetComponent<MeshRenderer>().material.mainTexture = CreateMapTexture();
         DungeonMapTexture.transform.localScale = new Vector2(Grid.GetLength(0), Grid.GetLength(1));
 
-        //RoomGenerator.ClearData ();
+        Create3dDungeon();
+
+        Camera.main.enabled = false;
+        Instantiate(playerPrefab, playerSpawnLocation, Quaternion.identity);
+
+        RoomGenerator.ClearData();
     }
 
     private void Update()

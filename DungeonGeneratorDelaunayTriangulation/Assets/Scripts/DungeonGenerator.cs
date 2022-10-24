@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
+using static UnityEditor.Experimental.GraphView.GraphView;
 
 // Room IDs start at 10
 public enum TileType
@@ -17,14 +18,16 @@ public class DungeonGenerator : MonoBehaviour
     public static DungeonGenerator instance;
 
     [SerializeField] public int[] RoomSizeDistribution = new int[] { 5, 5, 5, 5, 5, 5, 5, 5, 5, 6, 6, 7, 8, 10, 12, 14 };
-    [SerializeField] private RawImage DungeonMapTexture;
+    [SerializeField] private RawImage dungeonMapTexture;
     private int EndRoomID;
     private int[,] Grid;
     private List<int> ItemRoomIDs;
     [SerializeField] private GameObject player;
+    [SerializeField] private Image playerDot;
     private Vector3 playerSpawnLocation;
     private RoomGenerator RoomGenerator;
     private List<Room> Rooms;
+    private bool roomsGenerated = false;
     private List<int> SecondaryRoomIDs;
     private int StartRoomID;
 
@@ -568,9 +571,10 @@ public class DungeonGenerator : MonoBehaviour
         CreateGrid();
         AddWalls();
 
-        DungeonMapTexture.texture = CreateMapTexture();
+        dungeonMapTexture.texture = CreateMapTexture();
 
         Create3dDungeon();
+        roomsGenerated = true;
 
         player.transform.position = playerSpawnLocation;
         Camera.main.enabled = false;
@@ -581,6 +585,12 @@ public class DungeonGenerator : MonoBehaviour
 
     private void Update()
     {
+        if (roomsGenerated)
+        {
+            playerDot.rectTransform.localPosition = new Vector3((player.transform.position.x / Grid.GetLength(0) * dungeonMapTexture.rectTransform.sizeDelta.x) - dungeonMapTexture.rectTransform.sizeDelta.x / 2
+            , player.transform.position.z / Grid.GetLength(1) * dungeonMapTexture.rectTransform.sizeDelta.y - dungeonMapTexture.rectTransform.sizeDelta.y / 2, 0);
+        }
+
         //Generate a new dungeon
         if (Input.GetKeyDown(KeyCode.R))
             SceneManager.LoadScene("main");

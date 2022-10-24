@@ -1,8 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections.Generic;
 using UnityEngine.SceneManagement;
-using static RoomGenerator;
-using UnityEditor.SearchService;
 using UnityEngine.UI;
 
 // Room IDs start at 10
@@ -19,14 +17,11 @@ public class DungeonGenerator : MonoBehaviour
     public static DungeonGenerator instance;
 
     [SerializeField] public int[] RoomSizeDistribution = new int[] { 5, 5, 5, 5, 5, 5, 5, 5, 5, 6, 6, 7, 8, 10, 12, 14 };
-    [SerializeField] private GameObject DungeonMapTexture;
-    [SerializeField] private Image DungeonMapTexture2;
-
+    [SerializeField] private RawImage DungeonMapTexture;
     private int EndRoomID;
     private int[,] Grid;
-
     private List<int> ItemRoomIDs;
-
+    [SerializeField] private GameObject player;
     private Vector3 playerSpawnLocation;
     private RoomGenerator RoomGenerator;
     private List<Room> Rooms;
@@ -83,7 +78,7 @@ public class DungeonGenerator : MonoBehaviour
     private Transform dungeon3D;
 
     [SerializeField]
-    private GameObject primaryRoomTile, wallTile, playerPrefab;
+    private GameObject primaryRoomTile, wallTile;
 
     #endregion Tile Prefabs
 
@@ -336,6 +331,68 @@ public class DungeonGenerator : MonoBehaviour
         Init();
     }
 
+    private void Create3dDungeon()
+    {
+        int width = Grid.GetLength(0);
+        int height = Grid.GetLength(1);
+
+        bool playerHasSpawnLocation = false;
+
+        for (var x = 0; x < width; x++)
+        {
+            for (var y = 0; y < height; y++)
+            {
+                if (PrimaryRoomIDs.Contains(Grid[x, y]))
+                {
+                    createFloor(x, y, MainColor);
+                }
+                else if (SecondaryRoomIDs.Contains(Grid[x, y]))
+                {
+                    //createFloor(x, y, SecondaryColor);
+                    createFloor(x, y, HallwayColor);
+                }
+                else if (ItemRoomIDs.Contains(Grid[x, y]))
+                {
+                    createFloor(x, y, ItemRoomColor);
+                }
+                else if (StartRoomID == (Grid[x, y]))
+                {
+                    createFloor(x, y, StartRoomColor);
+
+                    if (!playerHasSpawnLocation)
+                    {
+                        playerSpawnLocation = new Vector3(x, 1, y);
+                        //Instantiate(playerPrefab, new Vector3(x, 0, y), Quaternion.identity);
+                        playerHasSpawnLocation = true;
+                    }
+                }
+                else if (EndRoomID == (Grid[x, y]))
+                {
+                    createFloor(x, y, EndRoomColor);
+                }
+                else if (Grid[x, y] == 1)
+                {
+                    createFloor(x, y, HallwayColor);
+                }
+                else if (Grid[x, y] == 2)
+                {
+                    Instantiate(wallTile, new Vector3(x, 0, y), Quaternion.identity, dungeon3D);
+                }
+                else if (Grid[x, y] == 3)
+                {
+                    createFloor(x, y, DoorColor);
+                }
+            }
+        }
+    }
+
+    private void createFloor(int x, int y, Color color)
+    {
+        GameObject tile = Instantiate(primaryRoomTile, new Vector3(x, 0, y), Quaternion.identity, dungeon3D);
+        Material mat = tile.GetComponent<Renderer>().material;
+        mat.color = color;
+    }
+
     private void CreateGrid()
     {
         PrimaryRoomIDs = new List<int>();
@@ -446,7 +503,7 @@ public class DungeonGenerator : MonoBehaviour
         {
             for (var y = 0; y < height; y++)
             {
-                Color color = Color.white;
+                Color color = Color.clear;
 
                 if (PrimaryRoomIDs.Contains(Grid[x, y]))
                 {
@@ -454,7 +511,7 @@ public class DungeonGenerator : MonoBehaviour
                 }
                 else if (SecondaryRoomIDs.Contains(Grid[x, y]))
                 {
-                    color = SecondaryColor;
+                    color = HallwayColor; //SecondaryColor
                 }
                 else if (ItemRoomIDs.Contains(Grid[x, y]))
                 {
@@ -492,72 +549,6 @@ public class DungeonGenerator : MonoBehaviour
         return texture;
     }
 
-    #region 3D Dungeon
-
-    private void Create3dDungeon()
-    {
-        int width = Grid.GetLength(0);
-        int height = Grid.GetLength(1);
-
-        bool playerHasSpawnLocation = false;
-
-        for (var x = 0; x < width; x++)
-        {
-            for (var y = 0; y < height; y++)
-            {
-                if (PrimaryRoomIDs.Contains(Grid[x, y]))
-                {
-                    createFloor(x, y, MainColor);
-                }
-                else if (SecondaryRoomIDs.Contains(Grid[x, y]))
-                {
-                    //createFloor(x, y, SecondaryColor);
-                    createFloor(x, y, HallwayColor);
-                }
-                else if (ItemRoomIDs.Contains(Grid[x, y]))
-                {
-                    createFloor(x, y, ItemRoomColor);
-                }
-                else if (StartRoomID == (Grid[x, y]))
-                {
-                    createFloor(x, y, StartRoomColor);
-
-                    if (!playerHasSpawnLocation)
-                    {
-                        playerSpawnLocation = new Vector3(x, 1, y);
-                        //Instantiate(playerPrefab, new Vector3(x, 0, y), Quaternion.identity);
-                        playerHasSpawnLocation = true;
-                    }
-                }
-                else if (EndRoomID == (Grid[x, y]))
-                {
-                    createFloor(x, y, EndRoomColor);
-                }
-                else if (Grid[x, y] == 1)
-                {
-                    createFloor(x, y, HallwayColor);
-                }
-                else if (Grid[x, y] == 2)
-                {
-                    Instantiate(wallTile, new Vector3(x, 0, y), Quaternion.identity, dungeon3D);
-                }
-                else if (Grid[x, y] == 3)
-                {
-                    createFloor(x, y, DoorColor);
-                }
-            }
-        }
-    }
-
-    private void createFloor(int x, int y, Color color)
-    {
-        GameObject tile = Instantiate(primaryRoomTile, new Vector3(x, 0, y), Quaternion.identity, dungeon3D);
-        Material mat = tile.GetComponent<Renderer>().material;
-        mat.color = color;
-    }
-
-    #endregion 3D Dungeon
-
     private void Init()
     {
         //DungeonMapTexture = transform.Find("DungeonMapTexture").gameObject;
@@ -577,13 +568,13 @@ public class DungeonGenerator : MonoBehaviour
         CreateGrid();
         AddWalls();
 
-        DungeonMapTexture.GetComponent<MeshRenderer>().material.mainTexture = CreateMapTexture();
-        DungeonMapTexture.transform.localScale = new Vector2(Grid.GetLength(0), Grid.GetLength(1));
+        DungeonMapTexture.texture = CreateMapTexture();
 
         Create3dDungeon();
 
+        player.transform.position = playerSpawnLocation;
         Camera.main.enabled = false;
-        Instantiate(playerPrefab, playerSpawnLocation, Quaternion.identity);
+        player.SetActive(true);
 
         RoomGenerator.ClearData();
     }
@@ -591,7 +582,7 @@ public class DungeonGenerator : MonoBehaviour
     private void Update()
     {
         //Generate a new dungeon
-        if (Input.GetKeyDown(KeyCode.Space))
+        if (Input.GetKeyDown(KeyCode.R))
             SceneManager.LoadScene("main");
     }
 }

@@ -1,0 +1,114 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &2251133445464790322
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2251133445464790323}
+  - component: {fileID: 2251133445464790324}
+  m_Layer: 0
+  m_Name: RoomGenerator
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &2251133445464790323
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2251133445464790322}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 34, y: 34, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 2251133446477911492}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &2251133445464790324
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2251133445464790322}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c8ae1db9b9dc8d24f80c01139407b166, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!1 &2251133446477911490
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2251133446477911492}
+  - component: {fileID: 2251133446477911491}
+  m_Layer: 0
+  m_Name: DungeonGenerator [2, 1.5, 60, 0.15, 100] [2, 2, 60, 0.03, 20)
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &2251133446477911492
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2251133446477911490}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 2251133445464790323}
+  m_Father: {fileID: 0}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &2251133446477911491
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2251133446477911490}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 52b5d7960b24cc84faf90fe9c11b13ea, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  RoomSizeDistribution: 050000000500000005000000050000000500000005000000050000000500000006000000060000000600000007000000080000000a0000000c0000000e000000
+  dungeonMapTexture: {fileID: 0}
+  player: {fileID: 0}
+  playerDot: {fileID: 0}
+  ItemRoomCount: 2
+  MainRoomFrequency: 1.5
+  Radius: 60
+  RoomConnectionFrequency: 0.15
+  RoomCount: 100
+  DisabledColor: {r: 0.2, g: 0.2, b: 0.2, a: 0.21960784}
+  DoorColor: {r: 0.46226418, g: 0.22170648, b: 0, a: 1}
+  EndRoomColor: {r: 1, g: 0, b: 0.024376392, a: 1}
+  HallwayColor: {r: 0.6509434, g: 0.6509434, b: 0.6509434, a: 1}
+  ItemRoomColor: {r: 0, g: 1, b: 1, a: 1}
+  MainColor: {r: 0.78431374, g: 0.5882353, b: 0.25490198, a: 1}
+  SecondaryColor: {r: 0.8, g: 0.8, b: 0.8, a: 1}
+  StartRoomColor: {r: 0, g: 1, b: 0, a: 1}
+  WallColor: {r: 0, g: 0, b: 0, a: 1}
+  dungeon3D: {fileID: 0}
+  primaryRoomTile: {fileID: 4512492762768393035, guid: a94c52f52bc50764ab6e1579706cff54,
+    type: 3}
+  wallTile: {fileID: 2676486119374356246, guid: a6d5a106ce5d56c49830e17caff6ccd1,
+    type: 3}

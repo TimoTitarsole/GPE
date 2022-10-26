@@ -365,7 +365,6 @@ public class DungeonGenerator : MonoBehaviour
                     if (!playerHasSpawnLocation)
                     {
                         playerSpawnLocation = new Vector3(x, 1, y);
-                        //Instantiate(playerPrefab, new Vector3(x, 0, y), Quaternion.identity);
                         playerHasSpawnLocation = true;
                     }
                 }
@@ -379,7 +378,7 @@ public class DungeonGenerator : MonoBehaviour
                 }
                 else if (Grid[x, y] == 2)
                 {
-                    Instantiate(wallTile, new Vector3(x, 0, y), Quaternion.identity, dungeon3D);
+                    Instantiate(wallTile, new Vector3(x, dungeon3D.transform.position.y, y), Quaternion.identity, dungeon3D);
                 }
                 else if (Grid[x, y] == 3)
                 {
@@ -391,7 +390,7 @@ public class DungeonGenerator : MonoBehaviour
 
     private void createFloor(int x, int y, Color color)
     {
-        GameObject tile = Instantiate(primaryRoomTile, new Vector3(x, 0, y), Quaternion.identity, dungeon3D);
+        GameObject tile = Instantiate(primaryRoomTile, new Vector3(x, dungeon3D.transform.position.y, y), Quaternion.identity, dungeon3D);
         Material mat = tile.GetComponent<Renderer>().material;
         mat.color = color;
     }

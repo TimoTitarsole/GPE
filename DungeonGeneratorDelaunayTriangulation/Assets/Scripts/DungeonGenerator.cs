@@ -35,6 +35,10 @@ public class DungeonGenerator : MonoBehaviour
 
     [Header("Dungeon Variables")]
     [SerializeField]
+    [Range(0, 10)]
+    public int floors = 1;
+
+    [SerializeField]
     [Range(0, 2)]
     public int ItemRoomCount = 1;
 

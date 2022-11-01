@@ -15,8 +15,6 @@ public enum TileType
 
 public class DungeonGenerator : MonoBehaviour
 {
-    public static DungeonGenerator instance;
-
     [SerializeField] public int[] RoomSizeDistribution = new int[] { 5, 5, 5, 5, 5, 5, 5, 5, 5, 6, 6, 7, 8, 10, 12, 14 };
     [SerializeField] private RawImage dungeonMapTexture;
     private int EndRoomID;
@@ -559,8 +557,8 @@ public class DungeonGenerator : MonoBehaviour
     {
         //DungeonMapTexture = transform.Find("DungeonMapTexture").gameObject;
         RoomGenerator = transform.Find("RoomGenerator").GetComponent<RoomGenerator>();
+        RoomGenerator.dungeonGenerator = this;
         RoomGenerator.OnRoomsGenerated += RoomGenerator_OnRoomsGenerated;
-        instance = this;
         //Generates rooms and room connections
         RoomGenerator.Generate(RoomCount, Radius, MainRoomFrequency, RoomConnectionFrequency);
     }

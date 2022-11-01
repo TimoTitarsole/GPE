@@ -6,6 +6,7 @@ using UnityEngine.SceneManagement;
 
 public class RoomGenerator : MonoBehaviour
 {
+    public DungeonGenerator dungeonGenerator;
     private Dictionary<Room, int> ConnectionCounter = new Dictionary<Room, int>();
 
     private List<LineSegment> DelaunayTriangulation;
@@ -90,10 +91,11 @@ public class RoomGenerator : MonoBehaviour
         for (int n = 0; n < roomCount; n++)
         {
             Room room = (GameObject.Instantiate(Resources.Load("Room") as GameObject)).GetComponent<Room>();
+            room.dungeonGenerator = dungeonGenerator;
             room.transform.parent = RoomsContainer.transform;
 
-            int width = DungeonGenerator.instance.RoomSizeDistribution[Random.Range(0, DungeonGenerator.instance.RoomSizeDistribution.Length)];
-            int height = DungeonGenerator.instance.RoomSizeDistribution[Random.Range(0, DungeonGenerator.instance.RoomSizeDistribution.Length)];
+            int width = dungeonGenerator.RoomSizeDistribution[Random.Range(0, dungeonGenerator.RoomSizeDistribution.Length)];
+            int height = dungeonGenerator.RoomSizeDistribution[Random.Range(0, dungeonGenerator.RoomSizeDistribution.Length)];
             Vector2 position = GetRandomPositionInCircle(radius);
 
             totalWidth += width;
@@ -439,7 +441,7 @@ public class RoomGenerator : MonoBehaviour
 
         if (start != null && end != null)
         {
-            for (int i = 0; i < DungeonGenerator.instance.ItemRoomCount; i++)
+            for (int i = 0; i < dungeonGenerator.ItemRoomCount; i++)
             {
                 if (roomsWithOneConnection.Count >= 1)
                 {
@@ -456,7 +458,7 @@ public class RoomGenerator : MonoBehaviour
             }
         }
 
-        if (start != null && end != null && items.Count == DungeonGenerator.instance.ItemRoomCount)
+        if (start != null && end != null && items.Count == dungeonGenerator.ItemRoomCount)
         {
             start.SetStartRoom();
             end.SetEndRoom();

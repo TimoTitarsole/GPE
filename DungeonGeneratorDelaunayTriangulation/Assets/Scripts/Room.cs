@@ -3,6 +3,7 @@ using System.Collections.Generic;
 
 public class Room : MonoBehaviour
 {
+    public DungeonGenerator dungeonGenerator;
     private SpriteRenderer Background;
 
     private Rigidbody2D RigidBody2D;
@@ -166,20 +167,20 @@ public class Room : MonoBehaviour
             if (IsMainRoom)
             {
                 if (IsStartRoom)
-                    Background.color = DungeonGenerator.instance.StartRoomColor;
+                    Background.color = dungeonGenerator.StartRoomColor;
                 else if (IsEndRoom)
-                    Background.color = DungeonGenerator.instance.EndRoomColor;
+                    Background.color = dungeonGenerator.EndRoomColor;
                 else if (IsItemRoom)
-                    Background.color = DungeonGenerator.instance.ItemRoomColor;
+                    Background.color = dungeonGenerator.ItemRoomColor;
                 else
-                    Background.color = DungeonGenerator.instance.MainColor;
+                    Background.color = dungeonGenerator.MainColor;
             }
             else
-                Background.color = DungeonGenerator.instance.SecondaryColor;
+                Background.color = dungeonGenerator.SecondaryColor;
         }
         else
         {
-            Background.color = DungeonGenerator.instance.DisabledColor;
+            Background.color = dungeonGenerator.DisabledColor;
         }
     }
 }

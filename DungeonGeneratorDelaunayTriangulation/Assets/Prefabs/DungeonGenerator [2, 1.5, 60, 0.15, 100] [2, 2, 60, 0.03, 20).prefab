@@ -44,6 +44,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c8ae1db9b9dc8d24f80c01139407b166, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  dungeonGenerator: {fileID: 0}
 --- !u!1 &2251133446477911490
 GameObject:
   m_ObjectHideFlags: 0
@@ -90,9 +91,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   RoomSizeDistribution: 050000000500000005000000050000000500000005000000050000000500000006000000060000000600000007000000080000000a0000000c0000000e000000
-  dungeonMapTexture: {fileID: 0}
-  player: {fileID: 0}
-  playerDot: {fileID: 0}
   ItemRoomCount: 2
   MainRoomFrequency: 1.5
   Radius: 60
@@ -107,8 +105,9 @@ MonoBehaviour:
   SecondaryColor: {r: 0.8, g: 0.8, b: 0.8, a: 1}
   StartRoomColor: {r: 0, g: 1, b: 0, a: 1}
   WallColor: {r: 0, g: 0, b: 0, a: 1}
-  dungeon3D: {fileID: 0}
   primaryRoomTile: {fileID: 4512492762768393035, guid: a94c52f52bc50764ab6e1579706cff54,
     type: 3}
   wallTile: {fileID: 2676486119374356246, guid: a6d5a106ce5d56c49830e17caff6ccd1,
+    type: 3}
+  endTrigger: {fileID: 5276548560667759374, guid: 2bccc873fdf7ea14997f384b67250842,
     type: 3}

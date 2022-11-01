@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 using static UnityEditor.Experimental.GraphView.GraphView;
+using System;
 
 // Room IDs start at 10
 public enum TileType
@@ -15,28 +16,32 @@ public enum TileType
 
 public class DungeonGenerator : MonoBehaviour
 {
-    public bool onRoomsGenerated = false;
+    [NonSerialized]
+    public int floor = 0;
+
+    [NonSerialized]
+    public Texture floorMapTexture;
+
+    [NonSerialized]
+    public int[,] Grid;
+
+    [NonSerialized]
+    public bool onRoomsGenerated = false, done = false;
+
+    [NonSerialized]
+    public Vector3 playerSpawnLocation;
+
     [SerializeField] public int[] RoomSizeDistribution = new int[] { 5, 5, 5, 5, 5, 5, 5, 5, 5, 6, 6, 7, 8, 10, 12, 14 };
-    [SerializeField] private RawImage dungeonMapTexture;
     private int EndRoomID;
-    private int[,] Grid;
     private List<int> ItemRoomIDs;
-    [SerializeField] private GameObject player;
-    [SerializeField] private Image playerDot;
-    private Vector3 playerSpawnLocation;
     private RoomGenerator RoomGenerator;
     private List<Room> Rooms;
-    private bool roomsGenerated = false;
     private List<int> SecondaryRoomIDs;
     private int StartRoomID;
 
     #region Room Stuff
 
     [Header("Dungeon Variables")]
-    [SerializeField]
-    [Range(0, 10)]
-    public int floors = 1;
-
     [SerializeField]
     [Range(0, 2)]
     public int ItemRoomCount = 1;
@@ -80,11 +85,10 @@ public class DungeonGenerator : MonoBehaviour
     #region Tile Prefabs
 
     [Header("Tile stuff")]
-    [SerializeField]
     private Transform dungeon3D;
 
     [SerializeField]
-    private GameObject primaryRoomTile, wallTile;
+    private GameObject primaryRoomTile, wallTile, endTrigger;
 
     #endregion Tile Prefabs
 
@@ -367,13 +371,15 @@ public class DungeonGenerator : MonoBehaviour
 
                     if (!playerHasSpawnLocation)
                     {
-                        playerSpawnLocation = new Vector3(x, 1, y);
+                        playerSpawnLocation = new Vector3(x, 1 + floor * 10, y);
                         playerHasSpawnLocation = true;
                     }
                 }
                 else if (EndRoomID == (Grid[x, y]))
                 {
                     createFloor(x, y, EndRoomColor);
+
+                    Instantiate(endTrigger, new Vector3(x, dungeon3D.transform.position.y, y), Quaternion.identity, dungeon3D);
                 }
                 else if (Grid[x, y] == 1)
                 {
@@ -556,7 +562,11 @@ public class DungeonGenerator : MonoBehaviour
 
     private void Init()
     {
-        //DungeonMapTexture = transform.Find("DungeonMapTexture").gameObject;
+        GameObject dungeonList = Instantiate(new GameObject("dungeonList"), transform);
+        dungeon3D = dungeonList.transform;
+        floor = Dungeon.floorNumber;
+        Vector3 newPos = new Vector3(0, 10 * floor, 0);
+        dungeon3D.transform.position = newPos;
         RoomGenerator = transform.Find("RoomGenerator").GetComponent<RoomGenerator>();
         RoomGenerator.dungeonGenerator = this;
         //Generates rooms and room connections
@@ -572,32 +582,21 @@ public class DungeonGenerator : MonoBehaviour
         CreateGrid();
         AddWalls();
 
-        dungeonMapTexture.texture = CreateMapTexture();
+        floorMapTexture = CreateMapTexture();
 
         Create3dDungeon();
-        roomsGenerated = true;
-
-        player.transform.position = playerSpawnLocation;
-        Camera.main.enabled = false;
-        player.SetActive(true);
+        //roomsGenerated = true;
 
         RoomGenerator.ClearData();
+        onRoomsGenerated = false;
+        done = true;
     }
 
     private void Update()
     {
-        if (roomsGenerated)
-        {
-            playerDot.rectTransform.localPosition = new Vector3((player.transform.position.x / Grid.GetLength(0) * dungeonMapTexture.rectTransform.sizeDelta.x) - dungeonMapTexture.rectTransform.sizeDelta.x / 2
-            , player.transform.position.z / Grid.GetLength(1) * dungeonMapTexture.rectTransform.sizeDelta.y - dungeonMapTexture.rectTransform.sizeDelta.y / 2, 0);
-        }
-        else if (onRoomsGenerated)
+        if (onRoomsGenerated)
         {
             OnRoomsGenerated();
         }
-
-        //Generate a new dungeon
-        if (Input.GetKeyDown(KeyCode.R))
-            SceneManager.LoadScene("main");
     }
 }

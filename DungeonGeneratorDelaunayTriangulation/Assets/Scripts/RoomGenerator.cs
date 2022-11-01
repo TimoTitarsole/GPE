@@ -25,10 +25,6 @@ public class RoomGenerator : MonoBehaviour
 
     private List<LineSegment> SpanningTree;
 
-    public delegate void RoomsGeneratedHandler();
-
-    public event RoomsGeneratedHandler OnRoomsGenerated;
-
     public bool IsValid
     {
         get;
@@ -207,7 +203,7 @@ public class RoomGenerator : MonoBehaviour
             }
         }
 
-        OnRoomsGenerated();
+        dungeonGenerator.onRoomsGenerated = true;
     }
 
     private RoomConnection CreateRoomConnection(Vector2 p0, Vector2 p1)

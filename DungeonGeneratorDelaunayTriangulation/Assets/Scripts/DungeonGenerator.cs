@@ -15,6 +15,7 @@ public enum TileType
 
 public class DungeonGenerator : MonoBehaviour
 {
+    public bool onRoomsGenerated = false;
     [SerializeField] public int[] RoomSizeDistribution = new int[] { 5, 5, 5, 5, 5, 5, 5, 5, 5, 6, 6, 7, 8, 10, 12, 14 };
     [SerializeField] private RawImage dungeonMapTexture;
     private int EndRoomID;
@@ -558,12 +559,11 @@ public class DungeonGenerator : MonoBehaviour
         //DungeonMapTexture = transform.Find("DungeonMapTexture").gameObject;
         RoomGenerator = transform.Find("RoomGenerator").GetComponent<RoomGenerator>();
         RoomGenerator.dungeonGenerator = this;
-        RoomGenerator.OnRoomsGenerated += RoomGenerator_OnRoomsGenerated;
         //Generates rooms and room connections
         RoomGenerator.Generate(RoomCount, Radius, MainRoomFrequency, RoomConnectionFrequency);
     }
 
-    private void RoomGenerator_OnRoomsGenerated()
+    private void OnRoomsGenerated()
     {
         //Create a copy of all Active rooms
         Rooms = RoomGenerator.Rooms;
@@ -590,6 +590,10 @@ public class DungeonGenerator : MonoBehaviour
         {
             playerDot.rectTransform.localPosition = new Vector3((player.transform.position.x / Grid.GetLength(0) * dungeonMapTexture.rectTransform.sizeDelta.x) - dungeonMapTexture.rectTransform.sizeDelta.x / 2
             , player.transform.position.z / Grid.GetLength(1) * dungeonMapTexture.rectTransform.sizeDelta.y - dungeonMapTexture.rectTransform.sizeDelta.y / 2, 0);
+        }
+        else if (onRoomsGenerated)
+        {
+            OnRoomsGenerated();
         }
 
         //Generate a new dungeon

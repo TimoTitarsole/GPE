@@ -8,7 +8,7 @@ public class EndTrigger : MonoBehaviour
     {
         if (other.tag == "Player")
         {
-            Dungeon.finish = true;
+            Dungeon.instance.finish = true;
         }
     }
 }

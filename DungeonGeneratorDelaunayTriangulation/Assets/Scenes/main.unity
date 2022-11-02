@@ -577,7 +577,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 78f96cec459678f47b9fc36943e7cc41, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  floorAmount: 2
+  finish: 0
+  floorScriptableObjects:
+  - {fileID: 11400000, guid: 22441a74f29572c41953efa040c0ddab, type: 2}
+  - {fileID: 11400000, guid: 7dc3fedffeee5674e8425047459f39b1, type: 2}
+  - {fileID: 11400000, guid: 817102e057822c34b8d15970c4e89986, type: 2}
   generatorPrefab: {fileID: 2251133446477911490, guid: e0aee6aa39f9ec345a8d351eaafaad62,
     type: 3}
   dungeonMapTexture: {fileID: 493876130}

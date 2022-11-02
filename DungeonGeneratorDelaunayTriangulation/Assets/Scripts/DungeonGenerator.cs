@@ -4,6 +4,8 @@ using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 using static UnityEditor.Experimental.GraphView.GraphView;
 using System;
+using VoronoiNS;
+using System.Linq;
 
 // Room IDs start at 10
 public enum TileType
@@ -31,66 +33,65 @@ public class DungeonGenerator : MonoBehaviour
     [NonSerialized]
     public Vector3 playerSpawnLocation;
 
-    [SerializeField] public int[] RoomSizeDistribution = new int[] { 5, 5, 5, 5, 5, 5, 5, 5, 5, 6, 6, 7, 8, 10, 12, 14 };
     private int EndRoomID;
+
+    private FloorScriptableObject floorData;
     private List<int> ItemRoomIDs;
+    private List<int> PrimaryRoomIDs;
     private RoomGenerator RoomGenerator;
     private List<Room> Rooms;
     private List<int> SecondaryRoomIDs;
     private int StartRoomID;
 
-    #region Room Stuff
-
-    [Header("Dungeon Variables")]
-    [SerializeField]
-    [Range(0, 2)]
-    public int ItemRoomCount = 1;
-
-    [SerializeField]
-    [Range(0, 2)]
-    private float MainRoomFrequency = 1f;
-
-    private List<int> PrimaryRoomIDs;
-
-    [SerializeField]
-    [Range(1, 500)]
-    private int Radius = 50;
-
-    [SerializeField]
-    [Range(0, 1)]
-    private float RoomConnectionFrequency = 0.15f;
-
-    [SerializeField]
-    [Range(10, 1000)]
-    private int RoomCount = 300;
-
-    #endregion Room Stuff
-
-    #region Colors
-
-    [Header("Colors")]
-    public Color DisabledColor = new Color(0.2f, 0.2f, 0.2f, 0.5f);
-
-    public Color DoorColor = Color.magenta;
-    public Color EndRoomColor = new Color(195 / 255f, 85 / 255f, 165 / 255f);
-    public Color HallwayColor = Color.red;
-    public Color ItemRoomColor = new Color(0 / 255f, 255 / 255f, 255 / 255f);
-    public Color MainColor = new Color(200f / 255f, 150f / 255f, 65 / 255f);
-    public Color SecondaryColor = new Color(0.8f, 0.8f, 0.8f);
-    public Color StartRoomColor = new Color(90 / 255f, 195 / 255f, 90 / 255f);
-    public Color WallColor = Color.black;
-
-    #endregion Colors
-
     #region Tile Prefabs
 
-    [Header("Tile stuff")]
     private Transform dungeon3D;
 
+    [Header("Tile stuff")]
     [SerializeField]
-    private GameObject primaryRoomTile, wallTile, endTrigger;
+    private GameObject endTrigger;
+
+    [SerializeField]
+    private GameObject primaryRoomTile;
+
+    [SerializeField]
+    private GameObject wallTile;
 
     #endregion Tile Prefabs
+
+    #region Floor Data
+
+    [NonSerialized]
+    public int[] RoomSizeDistribution;
+
+    #region Room Stuff Data
+
+    [NonSerialized]
+    public int ItemRoomCount;
+
+    [NonSerialized]
+    public float MainRoomFrequency;
+
+    [NonSerialized]
+    public int Radius;
+
+    [NonSerialized]
+    public float RoomConnectionFrequency;
+
+    [NonSerialized]
+    public int RoomCount;
+
+    #endregion Room Stuff Data
+
+    #region Colors Data
+
+    [Header("Colors")]
+    [NonSerialized]
+    public Color DisabledColor, DoorColor, EndRoomColor, HallwayColor, ItemRoomColor, MainColor, SecondaryColor, StartRoomColor, WallColor, CeilingColor;
+
+    #endregion Colors Data
+
+    #endregion Floor Data
 
     private void AddDoor(Vector2 p0, Vector2 p1)
     {
@@ -397,6 +398,64 @@ public class DungeonGenerator : MonoBehaviour
         }
     }
 
+    private void CreateCeiling()
+    {
+        float width = Grid.GetLength(0);
+
+        float length = Grid.GetLength(1);
+
+        float height = 3.5f + 10 * floor;
+
+        GameObject ceiling = new GameObject("Ceiling");
+        ceiling.transform.parent = dungeon3D;
+
+        MeshRenderer meshRenderer = ceiling.AddComponent<MeshRenderer>();
+        meshRenderer.sharedMaterial = Resources.Load("Ceiling") as Material; //new Material(Shader.Find("Unlit/Color"));
+        meshRenderer.sharedMaterial.color = CeilingColor;
+
+        MeshFilter meshFilter = ceiling.AddComponent<MeshFilter>();
+
+        Mesh mesh = new Mesh();
+
+        Vector3[] vertices = new Vector3[4]
+        {
+            new Vector3(0, height, 0),
+            new Vector3(width, height, 0),
+            new Vector3(0, height, length),
+            new Vector3(width, height, length)
+        };
+        mesh.vertices = vertices;
+
+        int[] tris = new int[6]
+        {
+            // lower left triangle
+            0, 1, 2,
+            // upper right triangle
+            2, 1, 3
+        };
+        mesh.triangles = tris;
+
+        Vector3[] normals = new Vector3[4]
+        {
+            -Vector3.forward,
+            -Vector3.forward,
+            -Vector3.forward,
+            -Vector3.forward
+        };
+        mesh.normals = normals;
+
+        Vector2[] uv = new Vector2[4]
+        {
+            new Vector2(0, 0),
+            new Vector2(1, 0),
+            new Vector2(0, 1),
+            new Vector2(1, 1)
+        };
+        mesh.uv = uv;
+
+        meshFilter.mesh = mesh;
+    }
+
     private void createFloor(int x, int y, Color color)
     {
         GameObject tile = Instantiate(primaryRoomTile, new Vector3(x, dungeon3D.transform.position.y, y), Quaternion.identity, dungeon3D);
@@ -562,16 +621,41 @@ public class DungeonGenerator : MonoBehaviour
 
     private void Init()
     {
+        LoadFloorData();
         GameObject dungeonList = new GameObject("dungeonList");
         dungeonList.transform.parent = transform;
         dungeon3D = dungeonList.transform;
-        floor = Dungeon.floorNumber;
+        //dungeon3D.gameObject.AddComponent<MeshFilter>();
+        //dungeon3D.gameObject.AddComponent<MeshRenderer>();
         Vector3 newPos = new Vector3(0, 10 * floor, 0);
         dungeon3D.transform.position = newPos;
         RoomGenerator = transform.Find("RoomGenerator").GetComponent<RoomGenerator>();
         RoomGenerator.dungeonGenerator = this;
         //Generates rooms and room connections
         RoomGenerator.Generate(RoomCount, Radius, MainRoomFrequency, RoomConnectionFrequency);
+    }
+
+    private void LoadFloorData()
+    {
+        floor = Dungeon.floorNumber;
+        floorData = Dungeon.instance.floorScriptableObjects[floor];
+        RoomSizeDistribution = floorData.RoomSizeDistribution;
+        ItemRoomCount = floorData.ItemRoomCount;
+        MainRoomFrequency = floorData.MainRoomFrequency;
+        Radius = floorData.Radius;
+        RoomConnectionFrequency = floorData.RoomConnectionFrequency;
+        RoomCount = floorData.RoomCount;
+
+        DisabledColor = floorData.DisabledColor;
+        DoorColor = floorData.DoorColor;
+        EndRoomColor = floorData.EndRoomColor;
+        HallwayColor = floorData.HallwayColor;
+        ItemRoomColor = floorData.ItemRoomColor;
+        MainColor = floorData.MainColor;
+        SecondaryColor = floorData.SecondaryColor;
+        StartRoomColor = floorData.StartRoomColor;
+        WallColor = floorData.WallColor;
+        CeilingColor = floorData.CeilingColor;
     }
 
     private void OnRoomsGenerated()
@@ -582,11 +666,11 @@ public class DungeonGenerator : MonoBehaviour
         //Convert rooms into a grid of integers
         CreateGrid();
         AddWalls();
+        CreateCeiling();
 
         floorMapTexture = CreateMapTexture();
 
         Create3dDungeon();
-        //roomsGenerated = true;
 
         RoomGenerator.ClearData();
         onRoomsGenerated = false;

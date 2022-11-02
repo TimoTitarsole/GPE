@@ -1,0 +1,30 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b25ef5d51373f264f89c286621d179ee, type: 3}
+  m_Name: Floor 3
+  m_EditorClassIdentifier: 
+  RoomSizeDistribution: 050000000500000005000000050000000500000005000000050000000500000005000000060000000600000007000000080000000a0000000c0000000e000000
+  ItemRoomCount: 2
+  MainRoomFrequency: 2
+  Radius: 60
+  RoomConnectionFrequency: 0.03
+  RoomCount: 20
+  CeilingColor: {r: 0.5, g: 0.5, b: 0.5, a: 1}
+  DisabledColor: {r: 0.2, g: 0.2, b: 0.2, a: 0.5}
+  DoorColor: {r: 0.735849, g: 0.43402, b: 0, a: 1}
+  EndRoomColor: {r: 1, g: 0.05638304, b: 0, a: 1}
+  HallwayColor: {r: 0.7641, g: 0.7641, b: 0.7641, a: 1}
+  ItemRoomColor: {r: 0, g: 1, b: 1, a: 1}
+  MainColor: {r: 0.7843137, g: 0.5882353, b: 0.254902, a: 1}
+  SecondaryColor: {r: 0.7641, g: 0.7641, b: 0.7641, a: 1}
+  StartRoomColor: {r: 0.2457366, g: 0.8113208, b: 0, a: 1}
+  WallColor: {r: 0, g: 0, b: 0, a: 1}

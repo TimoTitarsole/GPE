@@ -385,13 +385,13 @@ public class DungeonGenerator : MonoBehaviour
                 {
                     createFloor(x, y, HallwayColor);
                 }
-                else if (Grid[x, y] == 2)
-                {
-                    Instantiate(wallTile, new Vector3(x, dungeon3D.transform.position.y, y), Quaternion.identity, dungeon3D);
-                }
                 else if (Grid[x, y] == 3)
                 {
                     createFloor(x, y, DoorColor);
+                }
+                else if (Grid[x, y] == 2)
+                {
+                    Instantiate(wallTile, new Vector3(x, dungeon3D.transform.position.y, y), Quaternion.identity, dungeon3D);
                 }
             }
         }
@@ -562,7 +562,8 @@ public class DungeonGenerator : MonoBehaviour
 
     private void Init()
     {
-        GameObject dungeonList = Instantiate(new GameObject("dungeonList"), transform);
+        GameObject dungeonList = new GameObject("dungeonList");
+        dungeonList.transform.parent = transform;
         dungeon3D = dungeonList.transform;
         floor = Dungeon.floorNumber;
         Vector3 newPos = new Vector3(0, 10 * floor, 0);

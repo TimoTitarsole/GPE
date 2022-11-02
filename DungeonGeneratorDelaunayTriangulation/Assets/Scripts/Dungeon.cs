@@ -12,6 +12,8 @@ public class Dungeon : MonoBehaviour
     [NonSerialized]
     public static int floorNumber = 0;
 
+    public static Dungeon instance;
+
     [NonSerialized]
     public int currentFloor = 0;
 
@@ -36,7 +38,7 @@ public class Dungeon : MonoBehaviour
 
     #endregion playerStuff
 
-    public void finishedFloor()
+    public void FinishedFloor()
     {
         if (currentFloor + 1 < floorAmount)
         {
@@ -44,12 +46,17 @@ public class Dungeon : MonoBehaviour
             dungeonMapTexture.texture = generators[currentFloor].floorMapTexture;
             player.transform.position = generators[currentFloor].playerSpawnLocation;
         }
+        else
+        {
+            Debug.Log("You Win");
+        }
     }
 
     private void OnDungeonGenerated()
     {
         player.transform.position = generators[currentFloor].playerSpawnLocation;
         Camera.main.enabled = false;
+        dungeonMapTexture.transform.parent.gameObject.SetActive(true);
         player.SetActive(true);
 
         done = true;
@@ -57,10 +64,11 @@ public class Dungeon : MonoBehaviour
 
     private void Start()
     {
-        StartCoroutine(startFunction());
+        instance = this;
+        StartCoroutine(StartFunction());
     }
 
-    private IEnumerator startFunction()
+    private IEnumerator StartFunction()
     {
         currentFloor = 0;
         for (int i = 0; i < floorAmount; i++)
@@ -95,7 +103,7 @@ public class Dungeon : MonoBehaviour
         if (finish)
         {
             finish = false;
-            finishedFloor();
+            FinishedFloor();
         }
     }
 }

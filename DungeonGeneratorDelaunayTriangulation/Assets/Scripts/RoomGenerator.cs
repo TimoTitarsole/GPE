@@ -108,7 +108,8 @@ public class RoomGenerator : MonoBehaviour
 
         for (int n = 0; n < Rooms.Count; n++)
         {
-            if (Rooms[n].transform.localScale.x >= (2.35f - mainRoomFrequency) * widthAvg && Rooms[n].transform.localScale.y >= (2.35f - mainRoomFrequency) * heightAvg)
+            if (Rooms[n].transform.localScale.x >= (2.35f - mainRoomFrequency) * widthAvg && Rooms[n].transform.localScale.y
+                >= (2.35f - mainRoomFrequency) * heightAvg)
             {
                 Rooms[n].SetMain();
             }
@@ -154,7 +155,6 @@ public class RoomGenerator : MonoBehaviour
 
             MainRooms[DelaunayTriangulation[value].p0.Value].AddRoomConnection(CreateRoomConnection(DelaunayTriangulation[value].p0.Value, DelaunayTriangulation[value].p1.Value));
         }
-        //S
     }
 
     private void Calculate()

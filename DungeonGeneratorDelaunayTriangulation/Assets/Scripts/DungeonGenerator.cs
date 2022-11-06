@@ -4,7 +4,8 @@ using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 using static UnityEditor.Experimental.GraphView.GraphView;
 using System;
-using VoronoiNS;
+
+//using VoronoiNS;
 using System.Linq;
 
 // Room IDs start at 10
@@ -396,6 +397,7 @@ public class DungeonGenerator : MonoBehaviour
                 }
             }
         }
+        CreateCeiling();
     }
 
     private void CreateCeiling()
@@ -625,8 +627,6 @@ public class DungeonGenerator : MonoBehaviour
         GameObject dungeonList = new GameObject("dungeonList");
         dungeonList.transform.parent = transform;
         dungeon3D = dungeonList.transform;
-        //dungeon3D.gameObject.AddComponent<MeshFilter>();
-        //dungeon3D.gameObject.AddComponent<MeshRenderer>();
         Vector3 newPos = new Vector3(0, 10 * floor, 0);
         dungeon3D.transform.position = newPos;
         RoomGenerator = transform.Find("RoomGenerator").GetComponent<RoomGenerator>();
@@ -666,7 +666,6 @@ public class DungeonGenerator : MonoBehaviour
         //Convert rooms into a grid of integers
         CreateGrid();
         AddWalls();
-        CreateCeiling();
 
         floorMapTexture = CreateMapTexture();
 

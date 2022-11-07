@@ -249,20 +249,32 @@ public class DungeonGenerator : MonoBehaviour
                 {
                     if (x > 0 && gridCopy[x - 1, y] != val && gridCopy[x - 1, y] != (int)TileType.Wall)
                     {
-                        Grid[x - 1, y] = (int)TileType.Wall;
+                        if (x > 0 && gridCopy[x - 1, y] != val && gridCopy[x - 1, y] != (int)TileType.Hallway)
+                        {
+                            Grid[x - 1, y] = (int)TileType.Wall;
+                        }
                     }
                     else if (x < gridCopy.GetLength(0) - 1 && gridCopy[x + 1, y] != val && gridCopy[x + 1, y] != (int)TileType.Wall)
                     {
-                        Grid[x + 1, y] = (int)TileType.Wall;
+                        if (x < gridCopy.GetLength(0) - 1 && gridCopy[x + 1, y] != val && gridCopy[x + 1, y] != (int)TileType.Hallway)
+                        {
+                            Grid[x + 1, y] = (int)TileType.Wall;
+                        }
                     }
 
                     if (y > 0 && gridCopy[x, y - 1] != val && gridCopy[x, y - 1] != (int)TileType.Wall)
                     {
-                        Grid[x, y - 1] = (int)TileType.Wall;
+                        if (y > 0 && gridCopy[x, y - 1] != val && gridCopy[x, y - 1] != (int)TileType.Hallway)
+                        {
+                            Grid[x, y - 1] = (int)TileType.Wall;
+                        }
                     }
                     else if (y < Grid.GetLength(1) - 1 && gridCopy[x, y + 1] != val && gridCopy[x, y + 1] != (int)TileType.Wall)
                     {
-                        Grid[x, y + 1] = (int)TileType.Wall;
+                        if (y < Grid.GetLength(1) - 1 && gridCopy[x, y + 1] != val && gridCopy[x, y + 1] != (int)TileType.Hallway)
+                        {
+                            Grid[x, y + 1] = (int)TileType.Wall;
+                        }
                     }
                 }
 

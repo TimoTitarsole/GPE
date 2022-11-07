@@ -582,6 +582,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 22441a74f29572c41953efa040c0ddab, type: 2}
   - {fileID: 11400000, guid: 7dc3fedffeee5674e8425047459f39b1, type: 2}
   - {fileID: 11400000, guid: 817102e057822c34b8d15970c4e89986, type: 2}
+  - {fileID: 11400000, guid: e87dce57d0c74c64fa4b726257544c3b, type: 2}
   generatorPrefab: {fileID: 2251133446477911490, guid: e0aee6aa39f9ec345a8d351eaafaad62,
     type: 3}
   dungeonMapTexture: {fileID: 493876130}

@@ -113,6 +113,11 @@ public class Dungeon : MonoBehaviour
             SceneManager.LoadScene("main");
         }
 
+        if (Input.GetKeyDown(KeyCode.P))
+        {
+            finish = true;
+        }
+
         if (finish)
         {
             finish = false;

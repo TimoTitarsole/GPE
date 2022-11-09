@@ -10,14 +10,14 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: b25ef5d51373f264f89c286621d179ee, type: 3}
-  m_Name: Floor 2
+  m_Name: Custom
   m_EditorClassIdentifier: 
   RoomSizeDistribution: 050000000500000005000000050000000500000005000000050000000500000005000000060000000600000007000000080000000a0000000c0000000e000000
   ItemRoomCount: 2
-  MainRoomFrequency: 2
+  MainRoomFrequency: 1.5
   Radius: 60
-  RoomConnectionFrequency: 0.03
-  RoomCount: 20
+  RoomConnectionFrequency: 0.15
+  RoomCount: 100
   CeilingColor: {r: 0.5, g: 0.5, b: 0.5, a: 1}
   DisabledColor: {r: 0.2, g: 0.2, b: 0.2, a: 0.5}
   DoorColor: {r: 0.735849, g: 0.43402, b: 0, a: 1}

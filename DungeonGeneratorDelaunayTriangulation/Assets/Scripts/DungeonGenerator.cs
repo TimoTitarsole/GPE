@@ -350,6 +350,119 @@ public class DungeonGenerator : MonoBehaviour
         }
     }
 
+    private void AddWallsBad()
+    {
+        //Create a copy of current grid
+        int[,] gridCopy = new int[Grid.GetLength(0), Grid.GetLength(1)];
+        for (int x = 0; x < Grid.GetLength(0); x++)
+        {
+            for (int y = 0; y < Grid.GetLength(1); y++)
+            {
+                gridCopy[x, y] = Grid[x, y];
+            }
+        }
+
+        //Process
+        for (int x = 0; x < Grid.GetLength(0); x++)
+        {
+            for (int y = 0; y < Grid.GetLength(1); y++)
+            {
+                int val = gridCopy[x, y];
+
+                //walls for primary rooms
+                if (PrimaryRoomIDs.Contains(val))
+                {
+                    if (x > 0 && gridCopy[x - 1, y] != val && gridCopy[x - 1, y] != (int)TileType.Wall)
+                    {
+                        Grid[x - 1, y] = (int)TileType.Wall;
+                    }
+                    else if (x < gridCopy.GetLength(0) - 1 && gridCopy[x + 1, y] != val && gridCopy[x + 1, y] != (int)TileType.Wall)
+                    {
+                        Grid[x + 1, y] = (int)TileType.Wall;
+                    }
+
+                    if (y > 0 && gridCopy[x, y - 1] != val && gridCopy[x, y - 1] != (int)TileType.Wall)
+                    {
+                        Grid[x, y - 1] = (int)TileType.Wall;
+                    }
+                    else if (y < Grid.GetLength(1) - 1 && gridCopy[x, y + 1] != val && gridCopy[x, y + 1] != (int)TileType.Wall)
+                    {
+                        Grid[x, y + 1] = (int)TileType.Wall;
+                    }
+                }
+
+                //Outside borders
+                if (val == 0)
+                {
+                    if (x > 0 && gridCopy[x - 1, y] != (int)TileType.Nothing && gridCopy[x - 1, y] != (int)TileType.Wall)
+                    {
+                        Grid[x, y] = (int)TileType.Wall;
+                    }
+                    else if (x < Grid.GetLength(0) - 1 && gridCopy[x + 1, y] != (int)TileType.Nothing && gridCopy[x + 1, y] != (int)TileType.Wall)
+                    {
+                        Grid[x, y] = (int)TileType.Wall;
+                    }
+
+                    if (y > 0 && gridCopy[x, y - 1] != (int)TileType.Nothing && gridCopy[x, y - 1] != (int)TileType.Wall)
+                    {
+                        Grid[x, y] = (int)TileType.Wall;
+                    }
+                    else if (y < Grid.GetLength(1) - 1 && gridCopy[x, y + 1] != (int)TileType.Nothing && gridCopy[x, y + 1] != (int)TileType.Wall)
+                    {
+                        Grid[x, y] = (int)TileType.Wall;
+                    }
+                }
+            }
+        }
+
+        //update grid copy
+        for (int x = 0; x < Grid.GetLength(0); x++)
+        {
+            for (int y = 0; y < Grid.GetLength(1); y++)
+            {
+                gridCopy[x, y] = Grid[x, y];
+            }
+        }
+
+        //Add doors based on connecting lines
+        for (int n = 0; n < Rooms.Count; n++)
+        {
+            if (Rooms[n].IsMainRoom)
+            {
+                for (int m = 0; m < Rooms[n].Connections.Count; m++)
+                {
+                    //Line 1
+                    Vector2 p0 = Rooms[n].Connections[m].Line1.p0.Value;
+                    Vector2 p1 = Rooms[n].Connections[m].Line1.p1.Value;
+
+                    if ((int)p0.x > (int)p1.x || (int)p0.y > (int)p1.y)
+                    {
+                        p1 = Rooms[n].Connections[m].Line1.p0.Value;
+                        p0 = Rooms[n].Connections[m].Line1.p1.Value;
+                    }
+                    p0 = new Vector2(p0.x - RoomGenerator.XMin, p0.y - RoomGenerator.YMin);
+                    p1 = new Vector2(p1.x - RoomGenerator.XMin, p1.y - RoomGenerator.YMin);
+
+                    AddDoor(p0, p1);
+
+                    //Line 2
+                    p0 = Rooms[n].Connections[m].Line2.p0.Value;
+                    p1 = Rooms[n].Connections[m].Line2.p1.Value;
+
+                    if ((int)p0.x > (int)p1.x || (int)p0.y > (int)p1.y)
+                    {
+                        p1 = Rooms[n].Connections[m].Line2.p0.Value;
+                        p0 = Rooms[n].Connections[m].Line2.p1.Value;
+                    }
+                    p0 = new Vector2(p0.x - RoomGenerator.XMin, p0.y - RoomGenerator.YMin);
+                    p1 = new Vector2(p1.x - RoomGenerator.XMin, p1.y - RoomGenerator.YMin);
+
+                    AddDoor(p0, p1);
+                }
+            }
+        }
+    }
+
     private void Awake()
     {
         Init();
@@ -678,6 +791,7 @@ public class DungeonGenerator : MonoBehaviour
         //Convert rooms into a grid of integers
         CreateGrid();
         AddWalls();
+        //AddWallsBad();
 
         floorMapTexture = CreateMapTexture();
 
